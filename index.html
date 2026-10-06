@@ -2,72 +2,152 @@
 <html lang="ro">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Casa Capsula X7 — Tur 360°</title>
-<style>
-html,body,#viewer{margin:0;width:100%;height:100%;overflow:hidden;background:#111;font-family:Arial,sans-serif}
-#viewer{position:relative}
-#pano{width:100%;height:100%}
-#top{position:absolute;top:16px;left:16px;right:16px;z-index:5;display:flex;justify-content:space-between;align-items:center;pointer-events:none}
-.brand{background:rgba(0,0,0,.58);color:#fff;padding:11px 15px;border-radius:12px;font-weight:700;backdrop-filter:blur(8px)}
-#offer{pointer-events:auto;background:#fff;color:#111;text-decoration:none;padding:11px 16px;border-radius:12px;font-weight:700;box-shadow:0 4px 18px #0005}
-#rooms{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);z-index:5;display:flex;gap:8px;max-width:95%;overflow:auto;padding:4px}
-.room{border:0;background:rgba(0,0,0,.62);color:#fff;padding:10px 13px;border-radius:10px;white-space:nowrap;font-weight:600}
-.room.active{background:#fff;color:#111}
-.pnlm-hotspot.floor-point{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.18);border:3px solid #fff;box-shadow:0 4px 18px rgba(0,0,0,.45);backdrop-filter:blur(4px);transition:.18s;display:flex;align-items:center;justify-content:center}
-.pnlm-hotspot.floor-point:hover{transform:scale(1.15);background:rgba(255,255,255,.35)}
-.floor-point .dot{width:12px;height:12px;border-radius:50%;background:#fff;display:block}
-#hint{position:absolute;left:50%;bottom:72px;transform:translateX(-50%);z-index:4;background:#0009;color:#fff;padding:8px 12px;border-radius:9px;font-size:13px}
-</style>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Casa Capsula X7 — Tur Virtual 360°</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.css">
 <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.js"></script>
+<style>
+:root{--bg:#111;--glass:rgba(18,18,18,.72);--line:rgba(255,255,255,.18);--text:#fff;--muted:#d6d6d6}
+*{box-sizing:border-box}html,body,#app{margin:0;width:100%;height:100%;overflow:hidden;background:#000;font-family:Arial,Helvetica,sans-serif;color:var(--text)}
+#pano{position:absolute;inset:0}
+.overlay{position:absolute;z-index:20;pointer-events:none}
+.top{top:0;left:0;right:0;padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-start}
+.brand{pointer-events:auto;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(12px);border-radius:12px;padding:10px 14px;font-weight:700;letter-spacing:.3px;box-shadow:0 6px 24px #0005}
+.offer{pointer-events:auto;background:#fff;color:#111;text-decoration:none;padding:11px 15px;border-radius:12px;font-weight:800;box-shadow:0 6px 24px #0006}
+.offer:hover{transform:translateY(-1px)}
+.left{top:86px;left:16px;width:82px;display:flex;flex-direction:column;gap:8px}
+.tool{pointer-events:auto;border:1px solid var(--line);background:var(--glass);color:#fff;border-radius:12px;padding:10px 7px;cursor:pointer;text-align:center;font-size:11px;backdrop-filter:blur(12px)}
+.tool span{display:block;font-size:18px;margin-bottom:3px}
+.bottom{left:0;right:0;bottom:0;padding:12px 14px 14px;background:linear-gradient(0deg,rgba(0,0,0,.9),rgba(0,0,0,0))}
+.rail{display:flex;gap:8px;overflow:auto;padding:4px 0;scrollbar-width:none;pointer-events:auto}
+.rail::-webkit-scrollbar{display:none}
+.thumb{min-width:92px;height:54px;border-radius:8px;border:1px solid rgba(255,255,255,.2);overflow:hidden;position:relative;cursor:pointer;background:#222}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb b{position:absolute;left:5px;right:5px;bottom:4px;font-size:10px;text-shadow:0 1px 5px #000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.thumb.active{outline:2px solid #fff;outline-offset:1px}
+.scene-title{margin:0 0 8px 2px;font-size:14px;font-weight:800;text-shadow:0 2px 8px #000}
+.center-help{left:50%;top:50%;transform:translate(-50%,-50%);background:#0008;border:1px solid #fff2;padding:10px 13px;border-radius:10px;font-size:12px;opacity:0;transition:opacity .4s;backdrop-filter:blur(8px)}
+.center-help.show{opacity:1}
+.pnlm-hotspot.floor-point{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.16);border:3px solid #fff;box-shadow:0 5px 22px rgba(0,0,0,.55);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;transition:.18s}
+.pnlm-hotspot.floor-point:hover{transform:scale(1.15);background:rgba(255,255,255,.34)}
+.floor-point .dot{width:12px;height:12px;border-radius:50%;background:#fff;display:block}
+.pnlm-hotspot.floor-point:after{content:"";position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(255,255,255,.6);animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{transform:scale(.85);opacity:.8}70%{transform:scale(1.15);opacity:0}}
+.mobile-tools{display:none}
+@media(max-width:700px){
+ .left{display:none}.brand{font-size:12px;padding:9px 11px}.offer{font-size:12px;padding:10px 12px}.mobile-tools{display:flex;position:absolute;right:12px;top:70px;z-index:21;gap:7px}.mobile-tools .tool{padding:8px 10px}
+ .thumb{min-width:84px;height:50px}.scene-title{font-size:13px}
+}
+</style>
 </head>
 <body>
-<div id="viewer">
+<div id="app">
  <div id="pano"></div>
- <div id="top"><div class="brand">CASA CAPSULA X7 · TUR 360°</div><a id="offer" href="https://wa.me/?text=Salut!%20Vreau%20o%20oferta%20pentru%20Casa%20Capsula%20X7." target="_blank" rel="noopener">SOLICITĂ OFERTĂ</a></div>
- <div id="hint">Trage cu degetul / mouse-ul pentru a privi în jur • scroll pentru zoom</div>
- <div id="rooms"></div>
+
+ <div class="overlay top">
+   <div class="brand">CASA CAPSULA X7 · TUR VIRTUAL 360°</div>
+   <a class="offer" href="https://wa.me/?text=Salut!%20Vreau%20o%20oferta%20pentru%20Casa%20Capsula%20X7." target="_blank" rel="noopener">SOLICITĂ OFERTĂ</a>
+ </div>
+
+ <div class="overlay left">
+   <button class="tool" id="zoomIn"><span>＋</span>ZOOM</button>
+   <button class="tool" id="zoomOut"><span>－</span>ZOOM</button>
+   <button class="tool" id="home"><span>⌂</span>START</button>
+   <button class="tool" id="gyro"><span>◉</span>GIROSCOP</button>
+   <button class="tool" id="fs"><span>⛶</span>FULLSCREEN</button>
+ </div>
+
+ <div class="mobile-tools">
+   <button class="tool" id="mhome">⌂</button>
+   <button class="tool" id="mfs">⛶</button>
+ </div>
+
+ <div class="overlay center-help" id="help">Trage imaginea cu degetul / mouse-ul pentru 360° · apasă pe cerculețele de pe podea pentru deplasare</div>
+
+ <div class="overlay bottom">
+   <div class="scene-title" id="sceneTitle">LIVING</div>
+   <div class="rail" id="rail"></div>
+ </div>
 </div>
+
 <script>
 const scenes=[
- {id:"p2",name:"LIVING",img:"IMG_20261005_154900_00_182.jpg"},
- {id:"p3",name:"BUCĂTĂRIE",img:"IMG_20261005_155133_00_183.jpg"},
- {id:"p4",name:"LIVING · 2",img:"IMG_20261005_155143_00_184.jpg"},
- {id:"p5",name:"HOL",img:"IMG_20261005_155246_00_185.jpg"},
- {id:"p6",name:"LIVING · PANORAMĂ",img:"IMG_20261005_155322_00_186.jpg"},
- {id:"p7",name:"INTRARE · UȘĂ",img:"IMG_20261005_155406_00_187.jpg"},
- {id:"p8",name:"HOL · LIVING",img:"IMG_20261005_155514_00_188.jpg"},
- {id:"p9",name:"HOL · BAIE",img:"IMG_20261005_155554_00_189.jpg"},
- {id:"p10",name:"HOL · 2",img:"IMG_20261005_155646_00_190.jpg"}
+ {id:"p1",name:"LIVING",img:"IMG_20261005_154900_00_182.jpg"},
+ {id:"p2",name:"BUCĂTĂRIE",img:"IMG_20261005_155133_00_183.jpg"},
+ {id:"p3",name:"LIVING · 2",img:"IMG_20261005_155143_00_184.jpg"},
+ {id:"p4",name:"HOL",img:"IMG_20261005_155246_00_185.jpg"},
+ {id:"p5",name:"LIVING · PANORAMĂ",img:"IMG_20261005_155322_00_186.jpg"},
+ {id:"p6",name:"INTRARE · UȘĂ",img:"IMG_20261005_155406_00_187.jpg"},
+ {id:"p7",name:"HOL · LIVING",img:"IMG_20261005_155514_00_188.jpg"},
+ {id:"p8",name:"HOL · BAIE",img:"IMG_20261005_155554_00_189.jpg"},
+ {id:"p9",name:"HOL · 2",img:"IMG_20261005_155646_00_190.jpg"}
 ];
-const cfg={default:{firstScene:"p1",sceneFadeDuration:700,autoLoad:true,showControls:true},scenes:{}};
-scenes.forEach((s,i)=>{
- cfg.scenes[s.id]={title:s.name,type:"equirectangular",panorama:s.img,hfov:100,hotSpots:[]};
- if(i>0) cfg.scenes[s.id].hotSpots.push({
-   pitch:-20,yaw:180,type:"scene",sceneId:scenes[i-1].id,
-   cssClass:"floor-point",createTooltipFunc:floorPoint,createTooltipArgs:{label:"Înapoi la "+scenes[i-1].name}
- });
- if(i<scenes.length-1) cfg.scenes[s.id].hotSpots.push({
-   pitch:-20,yaw:0,type:"scene",sceneId:scenes[i+1].id,
-   cssClass:"floor-point",createTooltipFunc:floorPoint,createTooltipArgs:{label:"Mergi la "+scenes[i+1].name}
- });
-});
+
+const cfg={default:{firstScene:"p1",sceneFadeDuration:650,autoLoad:true,showControls:true,compass:false,mouseZoom:true,keyboardZoom:true,draggable:true},scenes:{}};
+
 function floorPoint(hotSpotDiv,args){
  hotSpotDiv.innerHTML='<span class="dot"></span>';
  hotSpotDiv.title=args.label;
  hotSpotDiv.setAttribute("aria-label",args.label);
 }
-const viewer=pannellum.viewer("pano",cfg);
-const rooms=document.getElementById("rooms");
-scenes.forEach(s=>{
- const b=document.createElement("button"); b.className="room"; b.textContent=s.name;
- b.onclick=()=>viewer.loadScene(s.id);
- b.dataset.id=s.id; rooms.appendChild(b);
+
+scenes.forEach((s,i)=>{
+ cfg.scenes[s.id]={
+  title:s.name,type:"equirectangular",panorama:s.img,hfov:98,minHfov:60,maxHfov:120,autoRotate:-1.5,hotSpots:[]
+ };
+ if(i>0) cfg.scenes[s.id].hotSpots.push({
+  pitch:-23,yaw:180,type:"scene",sceneId:scenes[i-1].id,cssClass:"floor-point",
+  createTooltipFunc:floorPoint,createTooltipArgs:{label:"Înapoi la "+scenes[i-1].name}
+ });
+ if(i<scenes.length-1) cfg.scenes[s.id].hotSpots.push({
+  pitch:-23,yaw:0,type:"scene",sceneId:scenes[i+1].id,cssClass:"floor-point",
+  createTooltipFunc:floorPoint,createTooltipArgs:{label:"Mergi la "+scenes[i+1].name}
+ });
 });
-function active(){rooms.querySelectorAll(".room").forEach(b=>b.classList.toggle("active",b.dataset.id===viewer.getScene()));}
-viewer.on("scenechange",active); active();
-setTimeout(()=>document.getElementById("hint").style.display="none",6000);
+
+const viewer=pannellum.viewer("pano",cfg);
+const rail=document.getElementById("rail");
+const title=document.getElementById("sceneTitle");
+
+scenes.forEach(s=>{
+ const b=document.createElement("button");
+ b.className="thumb";
+ b.dataset.id=s.id;
+ b.innerHTML='<img src="'+s.img+'" alt=""><b>'+s.name+'</b>';
+ b.onclick=()=>viewer.loadScene(s.id);
+ rail.appendChild(b);
+});
+
+function sync(){
+ const id=viewer.getScene();
+ const s=scenes.find(x=>x.id===id);
+ title.textContent=s?s.name:"TUR 360°";
+ rail.querySelectorAll(".thumb").forEach(b=>b.classList.toggle("active",b.dataset.id===id));
+}
+viewer.on("scenechange",sync);
+sync();
+
+function zoom(delta){viewer.setHfov(Math.max(60,Math.min(120,viewer.getHfov()+delta)));}
+document.getElementById("zoomIn").onclick=()=>zoom(-8);
+document.getElementById("zoomOut").onclick=()=>zoom(8);
+document.getElementById("home").onclick=()=>viewer.loadScene("p1",{fadeDuration:500});
+document.getElementById("mhome").onclick=()=>viewer.loadScene("p1",{fadeDuration:500});
+document.getElementById("fs").onclick=()=>document.documentElement.requestFullscreen?.();
+document.getElementById("mfs").onclick=()=>document.documentElement.requestFullscreen?.();
+
+document.getElementById("gyro").onclick=async()=>{
+ try{
+  if(typeof DeviceOrientationEvent!=="undefined" && typeof DeviceOrientationEvent.requestPermission==="function"){
+   const p=await DeviceOrientationEvent.requestPermission();
+   if(p!=="granted") return;
+  }
+  viewer.startOrientation();
+ }catch(e){alert("Girologia nu este disponibilă pe acest dispozitiv/browser.");}
+};
+
+const help=document.getElementById("help");
+help.classList.add("show");
+setTimeout(()=>help.classList.remove("show"),7000);
 </script>
 </body>
 </html>
