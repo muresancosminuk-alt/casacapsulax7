@@ -14,6 +14,9 @@ html,body,#viewer{margin:0;width:100%;height:100%;overflow:hidden;background:#11
 #rooms{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);z-index:5;display:flex;gap:8px;max-width:95%;overflow:auto;padding:4px}
 .room{border:0;background:rgba(0,0,0,.62);color:#fff;padding:10px 13px;border-radius:10px;white-space:nowrap;font-weight:600}
 .room.active{background:#fff;color:#111}
+.pnlm-hotspot.floor-point{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.18);border:3px solid #fff;box-shadow:0 4px 18px rgba(0,0,0,.45);backdrop-filter:blur(4px);transition:.18s;display:flex;align-items:center;justify-content:center}
+.pnlm-hotspot.floor-point:hover{transform:scale(1.15);background:rgba(255,255,255,.35)}
+.floor-point .dot{width:12px;height:12px;border-radius:50%;background:#fff;display:block}
 #hint{position:absolute;left:50%;bottom:72px;transform:translateX(-50%);z-index:4;background:#0009;color:#fff;padding:8px 12px;border-radius:9px;font-size:13px}
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.css">
@@ -42,9 +45,20 @@ const scenes=[
 const cfg={default:{firstScene:"p1",sceneFadeDuration:700,autoLoad:true,showControls:true},scenes:{}};
 scenes.forEach((s,i)=>{
  cfg.scenes[s.id]={title:s.name,type:"equirectangular",panorama:s.img,hfov:100,hotSpots:[]};
- if(i>0) cfg.scenes[s.id].hotSpots.push({pitch:-2,yaw:0,type:"scene",text:"← "+scenes[i-1].name,sceneId:scenes[i-1].id});
- if(i<scenes.length-1) cfg.scenes[s.id].hotSpots.push({pitch:-2,yaw:180,type:"scene",text:scenes[i+1].name+" →",sceneId:scenes[i+1].id});
+ if(i>0) cfg.scenes[s.id].hotSpots.push({
+   pitch:-20,yaw:180,type:"scene",sceneId:scenes[i-1].id,
+   cssClass:"floor-point",createTooltipFunc:floorPoint,createTooltipArgs:{label:"Înapoi la "+scenes[i-1].name}
+ });
+ if(i<scenes.length-1) cfg.scenes[s.id].hotSpots.push({
+   pitch:-20,yaw:0,type:"scene",sceneId:scenes[i+1].id,
+   cssClass:"floor-point",createTooltipFunc:floorPoint,createTooltipArgs:{label:"Mergi la "+scenes[i+1].name}
+ });
 });
+function floorPoint(hotSpotDiv,args){
+ hotSpotDiv.innerHTML='<span class="dot"></span>';
+ hotSpotDiv.title=args.label;
+ hotSpotDiv.setAttribute("aria-label",args.label);
+}
 const viewer=pannellum.viewer("pano",cfg);
 const rooms=document.getElementById("rooms");
 scenes.forEach(s=>{
