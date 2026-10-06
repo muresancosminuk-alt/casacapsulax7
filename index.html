@@ -3,151 +3,173 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>Casa Capsula X7 — Tur Virtual 360°</title>
+<title>Casa Capsula X7 — Tur 360°</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.css">
 <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.js"></script>
 <style>
-:root{--bg:#111;--glass:rgba(18,18,18,.72);--line:rgba(255,255,255,.18);--text:#fff;--muted:#d6d6d6}
+:root{--glass:rgba(12,12,14,.72);--line:rgba(255,255,255,.18);--text:#fff}
 *{box-sizing:border-box}html,body,#app{margin:0;width:100%;height:100%;overflow:hidden;background:#000;font-family:Arial,Helvetica,sans-serif;color:var(--text)}
 #pano{position:absolute;inset:0}
-.overlay{position:absolute;z-index:20;pointer-events:none}
-.top{top:0;left:0;right:0;padding:14px 16px;display:flex;justify-content:space-between;align-items:flex-start}
-.brand{pointer-events:auto;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(12px);border-radius:12px;padding:10px 14px;font-weight:700;letter-spacing:.3px;box-shadow:0 6px 24px #0005}
-.offer{pointer-events:auto;background:#fff;color:#111;text-decoration:none;padding:11px 15px;border-radius:12px;font-weight:800;box-shadow:0 6px 24px #0006}
-.offer:hover{transform:translateY(-1px)}
-.left{top:86px;left:16px;width:82px;display:flex;flex-direction:column;gap:8px}
-.tool{pointer-events:auto;border:1px solid var(--line);background:var(--glass);color:#fff;border-radius:12px;padding:10px 7px;cursor:pointer;text-align:center;font-size:11px;backdrop-filter:blur(12px)}
-.tool span{display:block;font-size:18px;margin-bottom:3px}
-.bottom{left:0;right:0;bottom:0;padding:12px 14px 14px;background:linear-gradient(0deg,rgba(0,0,0,.9),rgba(0,0,0,0))}
-.rail{display:flex;gap:8px;overflow:auto;padding:4px 0;scrollbar-width:none;pointer-events:auto}
+.ui{position:absolute;z-index:20}
+.top{top:14px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.brand{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(12px);padding:10px 14px;border-radius:12px;font-weight:800;box-shadow:0 6px 24px #0005}
+.offer{background:#fff;color:#111;text-decoration:none;padding:11px 15px;border-radius:12px;font-weight:800;box-shadow:0 6px 24px #0006;white-space:nowrap}
+.left{top:84px;left:14px;display:flex;flex-direction:column;gap:7px}
+.btn{border:1px solid var(--line);background:var(--glass);color:#fff;border-radius:11px;padding:9px 10px;cursor:pointer;backdrop-filter:blur(12px);font-size:11px}
+.btn span{display:block;font-size:17px;margin-bottom:2px}
+.bottom{left:0;right:0;bottom:0;padding:34px 14px 14px;background:linear-gradient(0deg,rgba(0,0,0,.92),rgba(0,0,0,0))}
+.title{font-size:14px;font-weight:800;margin:0 0 8px 2px;text-shadow:0 2px 8px #000}
+.tabs{display:flex;gap:7px;margin-bottom:8px;overflow:auto;scrollbar-width:none;pointer-events:auto}
+.tabs::-webkit-scrollbar{display:none}
+.tab{border:1px solid var(--line);background:rgba(0,0,0,.55);color:#fff;padding:7px 11px;border-radius:9px;white-space:nowrap;cursor:pointer;font-size:11px}
+.tab.active{background:#fff;color:#111}
+.rail{display:flex;gap:8px;overflow:auto;scrollbar-width:none;pointer-events:auto}
 .rail::-webkit-scrollbar{display:none}
-.thumb{min-width:92px;height:54px;border-radius:8px;border:1px solid rgba(255,255,255,.2);overflow:hidden;position:relative;cursor:pointer;background:#222}
-.thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.thumb b{position:absolute;left:5px;right:5px;bottom:4px;font-size:10px;text-shadow:0 1px 5px #000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.thumb.active{outline:2px solid #fff;outline-offset:1px}
-.scene-title{margin:0 0 8px 2px;font-size:14px;font-weight:800;text-shadow:0 2px 8px #000}
-.center-help{left:50%;top:50%;transform:translate(-50%,-50%);background:#0008;border:1px solid #fff2;padding:10px 13px;border-radius:10px;font-size:12px;opacity:0;transition:opacity .4s;backdrop-filter:blur(8px)}
-.center-help.show{opacity:1}
-.pnlm-hotspot.floor-point{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.16);border:3px solid #fff;box-shadow:0 5px 22px rgba(0,0,0,.55);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;transition:.18s}
-.pnlm-hotspot.floor-point:hover{transform:scale(1.15);background:rgba(255,255,255,.34)}
-.floor-point .dot{width:12px;height:12px;border-radius:50%;background:#fff;display:block}
+.card{min-width:104px;height:58px;padding:0;border:1px solid rgba(255,255,255,.2);border-radius:8px;overflow:hidden;background:#222;position:relative;cursor:pointer}
+.card img{width:100%;height:100%;object-fit:cover;display:block}
+.card b{position:absolute;left:5px;right:5px;bottom:4px;font-size:10px;text-shadow:0 1px 5px #000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card.active{outline:2px solid #fff;outline-offset:1px}
+.help{left:50%;top:50%;transform:translate(-50%,-50%);background:#0009;border:1px solid #fff2;padding:10px 13px;border-radius:10px;font-size:12px;opacity:0;transition:opacity .4s;backdrop-filter:blur(8px);text-align:center}
+.help.show{opacity:1}
+.pnlm-hotspot.floor-point{width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.12);border:3px solid #fff;box-shadow:0 5px 22px rgba(0,0,0,.6);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;transition:.18s}
+.pnlm-hotspot.floor-point:hover{transform:scale(1.16);background:rgba(255,255,255,.3)}
 .pnlm-hotspot.floor-point:after{content:"";position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(255,255,255,.6);animation:pulse 1.8s infinite}
-@keyframes pulse{0%,100%{transform:scale(.85);opacity:.8}70%{transform:scale(1.15);opacity:0}}
-.mobile-tools{display:none}
+.floor-point .dot{width:12px;height:12px;border-radius:50%;background:#fff;display:block}
+@keyframes pulse{0%,100%{transform:scale(.86);opacity:.7}70%{transform:scale(1.16);opacity:0}}
 @media(max-width:700px){
- .left{display:none}.brand{font-size:12px;padding:9px 11px}.offer{font-size:12px;padding:10px 12px}.mobile-tools{display:flex;position:absolute;right:12px;top:70px;z-index:21;gap:7px}.mobile-tools .tool{padding:8px 10px}
- .thumb{min-width:84px;height:50px}.scene-title{font-size:13px}
+ .brand{font-size:11px;padding:9px 10px}.offer{font-size:11px;padding:9px 11px}.left{top:72px;left:auto;right:10px;flex-direction:row}.left .txt{display:none}.btn{padding:8px 9px}.btn span{display:inline;font-size:16px;margin:0}.bottom{padding-bottom:11px}.card{min-width:90px;height:52px}
 }
 </style>
 </head>
 <body>
 <div id="app">
- <div id="pano"></div>
+<div id="pano"></div>
 
- <div class="overlay top">
-   <div class="brand">CASA CAPSULA X7 · TUR VIRTUAL 360°</div>
-   <a class="offer" href="https://wa.me/?text=Salut!%20Vreau%20o%20oferta%20pentru%20Casa%20Capsula%20X7." target="_blank" rel="noopener">SOLICITĂ OFERTĂ</a>
- </div>
+<div class="ui top">
+  <div class="brand">CASA CAPSULA X7 · TUR VIRTUAL 360°</div>
+  <a class="offer" href="https://wa.me/?text=Salut!%20Vreau%20o%20oferta%20pentru%20Casa%20Capsula%20X7." target="_blank" rel="noopener">SOLICITĂ OFERTĂ</a>
+</div>
 
- <div class="overlay left">
-   <button class="tool" id="zoomIn"><span>＋</span>ZOOM</button>
-   <button class="tool" id="zoomOut"><span>－</span>ZOOM</button>
-   <button class="tool" id="home"><span>⌂</span>START</button>
-   <button class="tool" id="gyro"><span>◉</span>GIROSCOP</button>
-   <button class="tool" id="fs"><span>⛶</span>FULLSCREEN</button>
- </div>
+<div class="ui left">
+  <button class="btn" id="zin"><span>＋</span><em class="txt"> ZOOM</em></button>
+  <button class="btn" id="zout"><span>−</span><em class="txt"> ZOOM</em></button>
+  <button class="btn" id="reset"><span>⌂</span><em class="txt"> START</em></button>
+  <button class="btn" id="full"><span>⛶</span><em class="txt"> ECRAN</em></button>
+</div>
 
- <div class="mobile-tools">
-   <button class="tool" id="mhome">⌂</button>
-   <button class="tool" id="mfs">⛶</button>
- </div>
+<div class="ui help" id="help">Privește 360° cu mouse-ul/degetul.<br>Apasă pe <b>cercurile de pe podea</b> pentru a merge în următorul punct.</div>
 
- <div class="overlay center-help" id="help">Trage imaginea cu degetul / mouse-ul pentru 360° · apasă pe cerculețele de pe podea pentru deplasare</div>
-
- <div class="overlay bottom">
-   <div class="scene-title" id="sceneTitle">LIVING</div>
-   <div class="rail" id="rail"></div>
- </div>
+<div class="ui bottom">
+  <div class="title" id="title">INTRARE</div>
+  <div class="tabs">
+    <button class="tab active" data-group="main">TUR COMPLET</button>
+    <button class="tab" data-group="closed">JALUZELE TRASE</button>
+  </div>
+  <div class="rail" id="rail"></div>
+</div>
 </div>
 
 <script>
-const scenes=[
- {id:"p1",name:"LIVING",img:"IMG_20261005_154900_00_182.jpg"},
- {id:"p2",name:"BUCĂTĂRIE",img:"IMG_20261005_155133_00_183.jpg"},
- {id:"p3",name:"LIVING · 2",img:"IMG_20261005_155143_00_184.jpg"},
- {id:"p4",name:"HOL",img:"IMG_20261005_155246_00_185.jpg"},
- {id:"p5",name:"LIVING · PANORAMĂ",img:"IMG_20261005_155322_00_186.jpg"},
- {id:"p6",name:"INTRARE · UȘĂ",img:"IMG_20261005_155406_00_187.jpg"},
- {id:"p7",name:"HOL · LIVING",img:"IMG_20261005_155514_00_188.jpg"},
- {id:"p8",name:"HOL · BAIE",img:"IMG_20261005_155554_00_189.jpg"},
- {id:"p9",name:"HOL · 2",img:"IMG_20261005_155646_00_190.jpg"}
+const main=[
+{id:"s1",name:"INTRARE",img:"IMG_20261005_155406_00_187.jpg"},
+{id:"s2",name:"HOL · LIVING",img:"IMG_20261005_155514_00_188.jpg"},
+{id:"s3",name:"HOL · BAIE",img:"IMG_20261005_155554_00_189.jpg"},
+{id:"s4",name:"BAIE · DUȘ",img:"IMG_20261005_155757_00_191.jpg"},
+{id:"s5",name:"BAIE · LAVABO",img:"IMG_20261005_155834_00_192.jpg"},
+{id:"s6",name:"HOL · 2",img:"IMG_20261005_155646_00_190.jpg"},
+{id:"s7",name:"BUCĂTĂRIE",img:"IMG_20261005_155133_00_183.jpg"},
+{id:"s8",name:"LIVING",img:"IMG_20261005_155143_00_184.jpg"},
+{id:"s9",name:"LIVING · PANORAMĂ",img:"IMG_20261005_155322_00_186.jpg"},
+{id:"s10",name:"BIROU / DORMITOR",img:"IMG_20261005_160627_00_197.jpg"},
+{id:"s11",name:"CAMERĂ · 2",img:"IMG_20261005_160841_00_200.jpg"}
 ];
-
-const cfg={default:{firstScene:"p1",sceneFadeDuration:650,autoLoad:true,showControls:true,compass:false,mouseZoom:true,keyboardZoom:true,draggable:true},scenes:{}};
-
-function floorPoint(hotSpotDiv,args){
- hotSpotDiv.innerHTML='<span class="dot"></span>';
- hotSpotDiv.title=args.label;
- hotSpotDiv.setAttribute("aria-label",args.label);
-}
-
-scenes.forEach((s,i)=>{
- cfg.scenes[s.id]={
-  title:s.name,type:"equirectangular",panorama:s.img,hfov:98,minHfov:60,maxHfov:120,autoRotate:-1.5,hotSpots:[]
- };
- if(i>0) cfg.scenes[s.id].hotSpots.push({
-  pitch:-23,yaw:180,type:"scene",sceneId:scenes[i-1].id,cssClass:"floor-point",
-  createTooltipFunc:floorPoint,createTooltipArgs:{label:"Înapoi la "+scenes[i-1].name}
- });
- if(i<scenes.length-1) cfg.scenes[s.id].hotSpots.push({
-  pitch:-23,yaw:0,type:"scene",sceneId:scenes[i+1].id,cssClass:"floor-point",
-  createTooltipFunc:floorPoint,createTooltipArgs:{label:"Mergi la "+scenes[i+1].name}
- });
-});
-
-const viewer=pannellum.viewer("pano",cfg);
-const rail=document.getElementById("rail");
-const title=document.getElementById("sceneTitle");
-
-scenes.forEach(s=>{
- const b=document.createElement("button");
- b.className="thumb";
- b.dataset.id=s.id;
- b.innerHTML='<img src="'+s.img+'" alt=""><b>'+s.name+'</b>';
- b.onclick=()=>viewer.loadScene(s.id);
- rail.appendChild(b);
-});
-
-function sync(){
- const id=viewer.getScene();
- const s=scenes.find(x=>x.id===id);
- title.textContent=s?s.name:"TUR 360°";
- rail.querySelectorAll(".thumb").forEach(b=>b.classList.toggle("active",b.dataset.id===id));
-}
-viewer.on("scenechange",sync);
-sync();
-
-function zoom(delta){viewer.setHfov(Math.max(60,Math.min(120,viewer.getHfov()+delta)));}
-document.getElementById("zoomIn").onclick=()=>zoom(-8);
-document.getElementById("zoomOut").onclick=()=>zoom(8);
-document.getElementById("home").onclick=()=>viewer.loadScene("p1",{fadeDuration:500});
-document.getElementById("mhome").onclick=()=>viewer.loadScene("p1",{fadeDuration:500});
-document.getElementById("fs").onclick=()=>document.documentElement.requestFullscreen?.();
-document.getElementById("mfs").onclick=()=>document.documentElement.requestFullscreen?.();
-
-document.getElementById("gyro").onclick=async()=>{
- try{
-  if(typeof DeviceOrientationEvent!=="undefined" && typeof DeviceOrientationEvent.requestPermission==="function"){
-   const p=await DeviceOrientationEvent.requestPermission();
-   if(p!=="granted") return;
-  }
-  viewer.startOrientation();
- }catch(e){alert("Girologia nu este disponibilă pe acest dispozitiv/browser.");}
+const closed=[
+{id:"c1",name:"LIVING · JALUZELE TRASE",img:"IMG_20261005_160402_00_195.jpg"},
+{id:"c2",name:"HOL · JALUZELE TRASE",img:"IMG_20261005_160451_00_196.jpg"},
+{id:"c3",name:"CAMERĂ · JALUZELE TRASE",img:"IMG_20261005_160627_00_197.jpg"},
+{id:"c4",name:"LIVING · JALUZELE TRASE",img:"IMG_20261005_160724_00_198.jpg"},
+{id:"c5",name:"LIVING · JALUZELE TRASE 2",img:"IMG_20261005_160754_00_199.jpg"},
+{id:"c6",name:"CAMERĂ · JALUZELE TRASE 2",img:"IMG_20261005_160841_00_200.jpg"}
+];
+let group="main";
+const all={main,closed};
+const graph={
+s1:[["s2",0]],
+s2:[["s1",180],["s3",75]],
+s3:[["s2",255],["s4",90],["s6",0]],
+s4:[["s3",270],["s5",0]],
+s5:[["s4",180],["s3",270]],
+s6:[["s3",180],["s7",0]],
+s7:[["s6",180],["s8",0]],
+s8:[["s7",180],["s9",0]],
+s9:[["s8",180],["s10",90]],
+s10:[["s9",270],["s11",0]],
+s11:[["s10",180]],
+c1:[["c2",270],["c4",0]],
+c2:[["c1",90],["c3",0]],
+c3:[["c2",180],["c4",270],["c6",0]],
+c4:[["c3",90],["c5",0]],
+c5:[["c4",180],["c6",90]],
+c6:[["c5",270],["c3",180]]
 };
 
-const help=document.getElementById("help");
-help.classList.add("show");
-setTimeout(()=>help.classList.remove("show"),7000);
+function floorPoint(div,args){
+ div.innerHTML='<span class="dot"></span>';
+ div.title=args.label;
+ div.setAttribute("aria-label",args.label);
+}
+
+function buildScenes(list){
+ const cfg={};
+ list.forEach((s,i)=>{
+  cfg[s.id]={title:s.name,type:"equirectangular",panorama:s.img,hfov:98,minHfov:58,maxHfov:120,showZoomCtrl:false,mouseZoom:true,draggable:true,hotSpots:[]};
+  (graph[s.id]||[]).forEach(([to,yaw])=>{
+    const target=list.find(x=>x.id===to)||main.concat(closed).find(x=>x.id===to);
+    if(!target) return;
+    cfg[s.id].hotSpots.push({pitch:-24,yaw,type:"scene",sceneId:target.id,cssClass:"floor-point",
+      createTooltipFunc:floorPoint,createTooltipArgs:{label:"Mergi la "+target.name}});
+  });
+ });
+ return cfg;
+}
+
+const cfg={default:{firstScene:"s1",sceneFadeDuration:500,autoLoad:true,showControls:true,compass:false},scenes:{}};
+Object.assign(cfg.scenes,buildScenes(main),buildScenes(closed));
+const viewer=pannellum.viewer("pano",cfg);
+
+const rail=document.getElementById("rail"), title=document.getElementById("title");
+function currentList(){return all[group]}
+function renderRail(){
+ rail.innerHTML="";
+ currentList().forEach(s=>{
+   const b=document.createElement("button"); b.className="card"; b.dataset.id=s.id;
+   b.innerHTML='<img loading="lazy" src="'+s.img+'" alt=""><b>'+s.name+'</b>';
+   b.onclick=()=>viewer.loadScene(s.id);
+   rail.appendChild(b);
+ });
+ sync();
+}
+function sync(){
+ const id=viewer.getScene();
+ const s=main.concat(closed).find(x=>x.id===id);
+ title.textContent=s?s.name:"TUR VIRTUAL 360°";
+ rail.querySelectorAll(".card").forEach(b=>b.classList.toggle("active",b.dataset.id===id));
+}
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{
+ group=t.dataset.group;
+ document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.group===group));
+ renderRail();
+ viewer.loadScene(currentList()[0].id,{fadeDuration:450});
+});
+viewer.on("scenechange",sync);
+renderRail();
+
+const zoom=d=>viewer.setHfov(Math.max(58,Math.min(120,viewer.getHfov()+d)));
+zin.onclick=()=>zoom(-7); zout.onclick=()=>zoom(7);
+reset.onclick=()=>viewer.loadScene("s1",{fadeDuration:450});
+full.onclick=()=>document.documentElement.requestFullscreen?.();
+
+const help=document.getElementById("help"); help.classList.add("show"); setTimeout(()=>help.classList.remove("show"),7500);
 </script>
 </body>
 </html>
