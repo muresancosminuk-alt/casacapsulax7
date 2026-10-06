@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QR — Casa Capsula X7 WebAR</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#111;color:#fff;font-family:Arial,sans-serif;text-align:center;padding:20px}
+.box{width:min(92vw,520px);background:#1c1c1f;border:1px solid #fff2;border-radius:22px;padding:28px;box-shadow:0 20px 70px #0009}
+h1{margin:0 0 8px;font-size:27px}p{color:#ddd;line-height:1.45;margin:7px 0 18px}
+#qrcode{display:flex;justify-content:center;background:#fff;padding:18px;width:max-content;margin:0 auto 18px;border-radius:10px}
+.url{font-size:12px;word-break:break-all;color:#bbb}.open{display:inline-block;margin-top:14px;background:#fff;color:#111;text-decoration:none;padding:12px 16px;border-radius:11px;font-weight:800}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>CASA CAPSULA X7</h1>
+<p><b>WEBAR 360°</b><br>Scanează codul QR cu telefonul pentru a porni turul.</p>
+<div id="qrcode"></div>
+<div class="url">muresancosminuk-alt.github.io/casacapsulax7/webar.html</div>
+<a class="open" href="webar.html">DESCHIDE WEBAR</a>
+</div>
+<script>
+new QRCode(document.getElementById("qrcode"),{
+ text:"https://muresancosminuk-alt.github.io/casacapsulax7/webar.html",
+ width:300,height:300,colorDark:"#000000",colorLight:"#ffffff",
+ correctLevel:QRCode.CorrectLevel.H
+});
+</script>
+</body>
+</html>
